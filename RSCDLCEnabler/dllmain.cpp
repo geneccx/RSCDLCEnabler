@@ -6,14 +6,14 @@
 #include "Patch.h"
 
 DWORD WINAPI MainThread(void*) {	
-	void* VerifySignatureOffset = FindPattern(0x01377000, 0x00DDE000, (uint8_t*)"\x55\x89\xE5\x83\xEC\x08\x8B\x47\x14", "xxxxxxxxx");
+	uint8_t* VerifySignatureOffset = FindPattern(0x01377000, 0x00DDE000, (uint8_t*)"\xE8\x00\x00\x00\x00\x83\xC4\x20\x88\xC3", "x????xxxxx");
 
 	if (VerifySignatureOffset) {
-		if (!Patch(VerifySignatureOffset, "\xB0\x01\xC3\x90", 4))
+		if (!Patch(VerifySignatureOffset + 8, "\xB3\x01", 2))
 			printf("Failed to patch verify_signature!\n");
 		else
 			printf("Patch verify_signature success!\n");
-	} 
+	}
 
 	return 0;
 }
